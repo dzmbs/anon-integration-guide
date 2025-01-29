@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Address } from 'viem';
 import { FunctionReturn, FunctionOptions, toResult, getChainFromName } from '@heyanon/sdk';
 import { ARBITRUM_CHAIN_ID, MIN_WITHDRAW_AMOUNT } from '../constants';
@@ -62,19 +63,21 @@ export async function withdrawFromHyperliquid({ chainName, account, amount }: Pr
 
         const signature = await signTypedDatas([{ primaryType: 'HyperliquidTransaction:Withdraw', types, message: action }]);
 
-        const res = await fetch('https://api.hyperliquid.xyz/exchange', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+        const res = await axios.post(
+            'https://api.hyperliquid.xyz/exchange',
+            {
                 action,
                 nonce,
                 signature,
-            }),
-        });
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            },
+        );
 
-        const data = await res.json();
+        const data = res.data;
 
         if (data.status !== 'ok') {
             throw new Error(data);
