@@ -8,7 +8,7 @@ interface Props {
     amount: string;
 }
 
-export async function withdrawFromHyperliquid({ chainName, account, amount }: Props, { signTypedDatas, signMessages, notify }: FunctionOptions): Promise<FunctionReturn> {
+export async function withdrawFromHyperliquid({ chainName, account, amount }: Props, { signTypedDatas, notify }: FunctionOptions): Promise<FunctionReturn> {
     try {
         if (!account) {
             console.log('No account found');
@@ -82,7 +82,6 @@ export async function withdrawFromHyperliquid({ chainName, account, amount }: Pr
 
         return toResult(
             `Successfully initiated withdraw of ${amount} USDC from Hyperliquid to Arbitrum. You will have to wait approximately 5 minutes for the funds to arrive on Arbitrum.`,
-            true,
         );
     } catch (error) {
         console.log('Withdraw error:', error);
