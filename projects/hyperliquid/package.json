@@ -7,7 +7,7 @@
         "test:coverage": "jest --coverage"
     },
     "dependencies": {
-        "@heyanon/sdk": "^1.0.4"
+        "@heyanon/sdk": "^1.0.5"
     },
     "license": "MIT",
     "engines": {
