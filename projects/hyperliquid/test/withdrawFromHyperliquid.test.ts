@@ -103,6 +103,20 @@ describe('withdrawFromHyperliquid', () => {
         expect(result).toEqual(toResult('Unsupported chain name: unsupported-chain', true));
     });
 
+    it('should return error for unsupported chain', async () => {
+        const result = await withdrawFromHyperliquid(
+            { ...props, chainName: 'ethereum' },
+            {
+                notify: mockNotify,
+                signTypedDatas: jest.fn(),
+                getProvider: mockProvider,
+                sendTransactions: jest.fn(),
+            },
+        );
+
+        expect(result).toEqual(toResult('Withdrawing funds from Hyperliquid is only supported to Arbitrum', true));
+    });
+
     it('should return error if amount is invalid', async () => {
         const result = await withdrawFromHyperliquid(
             { ...props, amount: 'invalid-amount' },
@@ -149,6 +163,26 @@ describe('withdrawFromHyperliquid', () => {
         });
 
         mockedAxios.post.mockRejectedValue(new Error('Network error'));
+
+        const result = await withdrawFromHyperliquid(props, {
+            notify: mockNotify,
+            signTypedDatas: mockSignTypedDatas,
+            getProvider: mockProvider,
+            sendTransactions: jest.fn(),
+        });
+
+        expect(result).toEqual(toResult('Failed to withdraw funds from Hyperliquid. Please try again.', true));
+    });
+
+    it('should return error for non-ok api response', async () => {
+        const mockSignTypedDatas = jest.fn().mockResolvedValue(['0x5ab40c899edec6de87fce05f2babe8ba378981d6e7e77324c64c5cd58c6af6d2'] as `0x${string}`[]);
+
+        mockedAxios.post.mockResolvedValue({
+            data: {
+                status: 'error',
+                message: 'Some error',
+            },
+        });
 
         const result = await withdrawFromHyperliquid(props, {
             notify: mockNotify,
