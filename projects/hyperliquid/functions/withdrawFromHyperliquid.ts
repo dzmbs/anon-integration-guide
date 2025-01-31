@@ -9,6 +9,14 @@ interface Props {
     amount: string;
 }
 
+/**
+ * Withdraws USDC funds from Hyperliquid by signing EIP-712 typed data
+ * @param chainName - Name of the chain (must be Arbitrum)
+ * @param account - User's wallet address
+ * @param amount - Amount of USDC to withdraw
+ * @param options - SDK function options
+ * @returns Promise resolving to function execution result
+ */
 export async function withdrawFromHyperliquid({ chainName, account, amount }: Props, { signTypedDatas, notify }: FunctionOptions): Promise<FunctionReturn> {
     try {
         if (!account) {
