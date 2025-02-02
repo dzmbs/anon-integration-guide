@@ -19,11 +19,15 @@ The Hyperliquid L1 uses a custom consensus algorithm called HyperBFT which is he
 -   "Send 25.5 USDC to Hyperliquid bridge on Arbitrum network"
 -   "Withdraw 20 USDC from Hyperliquid to Arbitrum"
 -   "Move 10.5 USDC from Hyperliquid back to Arbitrum"
+-   "Move 100USDC from my spot to my perp balance on Hyperliquid"
+-   "I need you to transfer 55.5 USD from perps to spot on Hyperliquid"
+
 
 ## Available Functions
 
 -   Bridging to Hyperliquid (minimum 5 USDC)
 -   Withdrawing from Hyperliquid (minimum 2 USDC)
+-   Moving USDC between spot and perp balances on Hyperliquid
 
 ## Tests
 
@@ -66,6 +70,16 @@ await withdrawFromHyperliquid({
     chainName: 'hyperliquid',
     account: '0x...',
     amount: '5', // Amount in USDC
+});
+```
+
+### Moving USDC between spot and perp balances on Hyperliquid
+
+```typescript
+// Withdraw USDC from Hyperliquid to Arbitrum
+await spotPerpTransfer({
+    amount: '5', // Amount in USDC
+    toPerp: false, // If true, transfers funds from spot to perp; if false, transfers funds from perp to spot
 });
 ```
 
