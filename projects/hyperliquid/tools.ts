@@ -48,4 +48,21 @@ export const tools: AiTool[] = [
             },
         ],
     },
+    {
+        name: 'spotPerpTransfer',
+        description: "Transfers funds between the user's spot and perp balances on Hyperliquid.",
+        required: ['amount', 'toPerp'],
+        props: [
+            {
+                name: 'amount',
+                type: 'string',
+                description: 'Amount of USDC tokens to transfer. (must be greater than 0)',
+            },
+            {
+                name: 'toPerp',
+                type: 'boolean',
+                description: 'If true, transfers funds from spot to perp balance; if false, transfers funds from perp to spot balance.',
+            },
+        ],
+    },
 ];
