@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Address } from 'viem';
+import { Address, parseSignature } from 'viem';
 import { FunctionReturn, FunctionOptions, toResult, getChainFromName } from '@heyanon/sdk';
 import { ARBITRUM_CHAIN_ID, MIN_WITHDRAW_AMOUNT } from '../constants';
 
@@ -69,14 +69,35 @@ export async function withdrawFromHyperliquid({ chainName, account, amount }: Pr
             throw new Error('signTypedDatas is not available');
         }
 
-        const signature = await signTypedDatas([{ primaryType: 'HyperliquidTransaction:Withdraw', types, message: action }]);
+        const domain = {
+            name: 'HyperliquidSignTransaction',
+            version: '1',
+            chainId: 42161,
+            verifyingContract: '0x0000000000000000000000000000000000000000' as `0x${string}`,
+        };
+
+        const signatureHex = await signTypedDatas([
+            {
+                domain,
+                primaryType: 'HyperliquidTransaction:Withdraw',
+                types,
+                message: action,
+            },
+        ]);
+        const signature = parseSignature(signatureHex[0]);
+        let signatureSerializable;
+        if (signature.v) {
+            signatureSerializable = { r: signature.r, s: signature.s, yParity: signature.yParity, v: Number(signature.v) };
+        } else {
+            signatureSerializable = { r: signature.r, s: signature.s, yParity: signature.yParity };
+        }
 
         const res = await axios.post(
             'https://api.hyperliquid.xyz/exchange',
             {
                 action,
                 nonce,
-                signature,
+                signature: signatureSerializable,
             },
             {
                 headers: {
