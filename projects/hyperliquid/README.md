@@ -21,13 +21,17 @@ The Hyperliquid L1 uses a custom consensus algorithm called HyperBFT which is he
 -   "Move 10.5 USDC from Hyperliquid back to Arbitrum"
 -   "Move 100USDC from my spot to my perp balance on Hyperliquid"
 -   "I need you to transfer 55.5 USD from perps to spot on Hyperliquid"
-
+-   "Open a long on 1$ of BTC with no leverage on Hyperliquid"
+-   "Short me 1 BTC with 50x leverage on Hyperliquid"
+-   "Close my ARB position on Hyperliquid"
+-   "Close my Bitcoin position on Hyperliquid"
 
 ## Available Functions
 
 -   Bridging to Hyperliquid (minimum 5 USDC)
 -   Withdrawing from Hyperliquid (minimum 2 USDC)
 -   Moving USDC between spot and perp balances on Hyperliquid
+-   Opening and closing perp positions on Hyperliquid
 
 ## Tests
 
@@ -81,6 +85,20 @@ await spotPerpTransfer({
     amount: '5', // Amount in USDC
     toPerp: false, // If true, transfers funds from spot to perp; if false, transfers funds from perp to spot
 });
+```
+
+### Opening a perp position
+
+```typescript
+// Shorts 1000$ of BTC at 50x leverage on Hyperliquid
+await openPerp({ account: '0xYourAddress', asset: 'BTC', size: '1000', sizeUnit: 'USD', leverage: 50, short: true });
+```
+
+### Closing a perp position
+
+```typescript
+// Closes the open ETH perp position on Hyperliquid
+await closePerp({ account: '0xYourAddress', asset: 'ETH' });
 ```
 
 ## Note

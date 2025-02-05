@@ -4,11 +4,16 @@
     "scripts": {
         "yarn": "yarn install",
         "test": "jest",
-        "test:coverage": "jest --coverage"
+        "test:coverage": "jest --coverage",
+        "test2": "npx tsx test.ts",
+        "testtools": "npx tsx testtools.ts"
     },
     "dependencies": {
         "@heyanon/sdk": "^1.0.5",
-        "axios": "^1.7.9"
+        "@msgpack/msgpack": "^3.0.0-beta3",
+        "axios": "^1.7.9",
+        "dotenv": "^16.4.7",
+        "openai": "^4.82.0"
     },
     "license": "MIT",
     "engines": {

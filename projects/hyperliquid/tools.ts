@@ -65,4 +65,61 @@ export const tools: AiTool[] = [
             },
         ],
     },
+    {
+        name: 'openPerp',
+        description: 'Opens a new perp position on Hyperliquid.',
+        required: ['account', 'asset', 'size', 'sizeUnit', 'leverage', 'short'],
+        props: [
+            {
+                name: 'account',
+                type: 'string',
+                description: 'User wallet address that will open the perp position.',
+            },
+            {
+                name: 'asset',
+                type: 'string',
+                enum: ['ETH', 'BTC', 'HYPE', 'PURR', 'LINK', 'ARB'],
+                description: 'Name of the underlying asset for the perp position.',
+            },
+            {
+                name: 'size',
+                type: 'string',
+                description: 'Size of the position (interpreted in asset units or USD, depending on sizeUnit).',
+            },
+            {
+                name: 'sizeUnit',
+                type: 'string',
+                enum: ['ASSET', 'USD'],
+                description: 'Specifies whether "size" is denominated in the asset or in USD.',
+            },
+            {
+                name: 'leverage',
+                type: 'number',
+                description: 'Leverage multiplier for the position.',
+            },
+            {
+                name: 'short',
+                type: 'boolean',
+                description: 'If true, opens a short position; if false, opens a long position.',
+            },
+        ],
+    },
+    {
+        name: 'closePerp',
+        description: 'Closes an existing perp position on Hyperliquid.',
+        required: ['account', 'asset'],
+        props: [
+            {
+                name: 'account',
+                type: 'string',
+                description: 'User wallet address that will close the perp position.',
+            },
+            {
+                name: 'asset',
+                type: 'string',
+                enum: ['ETH', 'BTC', 'HYPE', 'PURR', 'LINK', 'ARB'],
+                description: 'Name of the underlying asset whose perp position should be closed.',
+            },
+        ],
+    },
 ];
