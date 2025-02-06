@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Address, parseSignature } from 'viem';
+import { Address, parseSignature, zeroAddress } from 'viem';
 import { FunctionReturn, FunctionOptions, toResult } from '@heyanon/sdk';
-import { hyperliquidPerps } from '../constants';
+import { ARBITRUM_CHAIN_ID, ARBITRUM_CHAIN_ID_HEX, hyperliquidPerps, MIN_HYPERLIQUID_TRADE_SIZE } from '../constants';
 import { generatePrivateKey, privateKeyToAccount } from 'viem/accounts';
 import { _formatPrice } from './util/_formatPrice';
 import { _formatSize } from './util/_formatSize';
@@ -83,7 +83,7 @@ export async function openPerp(
             sizeUsd = sizeAsset * midPrice;
         }
 
-        if (!closing && sizeUsd < 11) return toResult('Minimum order size is 11$', true);
+        if (!closing && sizeUsd < MIN_HYPERLIQUID_TRADE_SIZE) return toResult(`Minimum order size is ${MIN_HYPERLIQUID_TRADE_SIZE}$`, true);
         if (!closing && sizeUsd / leverage > Number(withdrawable)) return toResult('Not enough USD on Hyperliquid', true);
 
         //
@@ -96,7 +96,7 @@ export async function openPerp(
             const action = {
                 type: 'approveAgent',
                 hyperliquidChain: 'Mainnet',
-                signatureChainId: '0xa4b1',
+                signatureChainId: ARBITRUM_CHAIN_ID_HEX,
                 agentAddress: agentWallet.address,
                 agentName: 'funding_agent',
                 nonce,
@@ -114,8 +114,8 @@ export async function openPerp(
             const domain = {
                 name: 'HyperliquidSignTransaction',
                 version: '1',
-                chainId: 42161,
-                verifyingContract: '0x0000000000000000000000000000000000000000' as `0x${string}`,
+                chainId: ARBITRUM_CHAIN_ID,
+                verifyingContract: zeroAddress,
             };
 
             if (!signTypedDatas) {
@@ -204,9 +204,9 @@ export async function openPerp(
 
         const { totalSz, avgPx } = res.data.response.data.statuses[0].filled ||
             res.data.response.data.statuses[1]?.filled || {
-                totalSz: '0',
-                avgPx: '0',
-            };
+            totalSz: '0',
+            avgPx: '0',
+        };
 
         if (totalSz == '0') throw new Error('Could not open order');
 

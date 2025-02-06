@@ -21,7 +21,7 @@ The Hyperliquid L1 uses a custom consensus algorithm called HyperBFT which is he
 -   "Move 10.5 USDC from Hyperliquid back to Arbitrum"
 -   "Move 100USDC from my spot to my perp balance on Hyperliquid"
 -   "I need you to transfer 55.5 USD from perps to spot on Hyperliquid"
--   "Open a long on 1$ of BTC with no leverage on Hyperliquid"
+-   "Open a long on 12$ of BTC with no leverage on Hyperliquid"
 -   "Short me 1 BTC with 50x leverage on Hyperliquid"
 -   "Close my ARB position on Hyperliquid"
 -   "Close my Bitcoin position on Hyperliquid"

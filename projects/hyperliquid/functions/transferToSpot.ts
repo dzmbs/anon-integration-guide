@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { parseSignature } from 'viem';
+import { parseSignature, zeroAddress } from 'viem';
 import { FunctionReturn, FunctionOptions, toResult } from '@heyanon/sdk';
+import { ARBITRUM_CHAIN_ID, ARBITRUM_CHAIN_ID_HEX } from '../constants';
 
 interface Props {
     amount: string;
@@ -37,7 +38,7 @@ export async function transferToSpot({ amount }: Props, { signTypedDatas, notify
         const action = {
             type: 'usdClassTransfer',
             hyperliquidChain: 'Mainnet',
-            signatureChainId: '0xa4b1',
+            signatureChainId: ARBITRUM_CHAIN_ID_HEX,
             amount,
             toPerp: false,
             nonce,
@@ -50,8 +51,8 @@ export async function transferToSpot({ amount }: Props, { signTypedDatas, notify
         const domain = {
             name: 'HyperliquidSignTransaction',
             version: '1',
-            chainId: 42161,
-            verifyingContract: '0x0000000000000000000000000000000000000000' as `0x${string}`,
+            chainId: ARBITRUM_CHAIN_ID,
+            verifyingContract: zeroAddress,
         };
 
         const signatureHex = await signTypedDatas([

@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { Address, parseSignature } from 'viem';
+import { Address, parseSignature, zeroAddress } from 'viem';
 import { FunctionReturn, FunctionOptions, toResult, getChainFromName } from '@heyanon/sdk';
-import { ARBITRUM_CHAIN_ID, MIN_WITHDRAW_AMOUNT } from '../constants';
+import { ARBITRUM_CHAIN_ID, ARBITRUM_CHAIN_ID_HEX, MIN_WITHDRAW_AMOUNT } from '../constants';
 
 interface Props {
     chainName: string;
@@ -59,7 +59,7 @@ export async function withdrawFromHyperliquid({ chainName, account, amount }: Pr
         const action = {
             type: 'withdraw3',
             hyperliquidChain: 'Mainnet',
-            signatureChainId: '0xa4b1',
+            signatureChainId: ARBITRUM_CHAIN_ID_HEX,
             amount,
             time: nonce,
             destination: account,
@@ -72,8 +72,8 @@ export async function withdrawFromHyperliquid({ chainName, account, amount }: Pr
         const domain = {
             name: 'HyperliquidSignTransaction',
             version: '1',
-            chainId: 42161,
-            verifyingContract: '0x0000000000000000000000000000000000000000' as `0x${string}`,
+            chainId: ARBITRUM_CHAIN_ID,
+            verifyingContract: zeroAddress,
         };
 
         const signatureHex = await signTypedDatas([

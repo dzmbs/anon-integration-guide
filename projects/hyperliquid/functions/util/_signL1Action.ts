@@ -1,5 +1,6 @@
-import { parseSignature, PrivateKeyAccount } from "viem";
+import { parseSignature, PrivateKeyAccount, zeroAddress } from "viem";
 import { _actionHash } from "./_actionHash";
+import { HYPERLIQUID_L1_DOMAIN_CHAIN_ID } from "../../constants";
 
 /**
  * Signs an action on Hyperliquid chain using agent wallet
@@ -8,9 +9,9 @@ export async function _signL1Action(action: any, nonce: number, isMainnet: boole
     const hash = _actionHash(action, nonce);
     const phantomAgent = { source: isMainnet ? 'a' : 'b', connectionId: hash };
     const domain = {
-        chainId: 1337,
+        chainId: HYPERLIQUID_L1_DOMAIN_CHAIN_ID,
         name: 'Exchange',
-        verifyingContract: '0x0000000000000000000000000000000000000000' as `0x${string}`,
+        verifyingContract: zeroAddress,
         version: '1',
     };
     const types = {

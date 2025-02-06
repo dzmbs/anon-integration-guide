@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Address } from 'viem';
 import { openPerp } from '../functions';
-import { hyperliquidPerps } from '../constants';
+import { hyperliquidPerps, MIN_HYPERLIQUID_TRADE_SIZE } from '../constants';
 import { toResult } from '@heyanon/sdk';
 
 // Mock axios and global fetch
@@ -116,7 +116,7 @@ describe('openPerp', () => {
             signTypedDatas: mockSignTypedDatasExample,
         });
 
-        expect(result).toEqual(toResult('Minimum order size is 11$', true));
+        expect(result).toEqual(toResult(`Minimum order size is ${MIN_HYPERLIQUID_TRADE_SIZE}$`, true));
     });
 
     it('should return error if not enough withdrawable funds are available', async () => {
