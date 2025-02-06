@@ -8,7 +8,7 @@ const mockedAxios = axios as jest.Mocked<typeof axios>;
 
 // We'll use the actual implementation of openPerp, so remove any mocks for it.
 
-// Mock global.fetch used in updateLeverage (inside openPerp)
+// Mock global.fetch used in _updateLeverage (inside openPerp)
 global.fetch = jest.fn();
 
 const account = '0x92CC36D66e9d739D50673d1f27929a371FB83a67' as Address;

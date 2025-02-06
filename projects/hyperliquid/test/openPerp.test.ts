@@ -215,7 +215,7 @@ describe('openPerp', () => {
             { data: { status: 'err', response: 'error response' } },
         ]);
 
-        // Also mock fetch for updateLeverage.
+        // Also mock fetch for _updateLeverage.
         (global.fetch as jest.Mock).mockResolvedValue({
             json: () => Promise.resolve({}),
         });

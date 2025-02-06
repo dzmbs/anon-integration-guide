@@ -7,7 +7,7 @@ import { _formatPrice } from './util/_formatPrice';
 import { _formatSize } from './util/_formatSize';
 import { _actionHash } from './util/_actionHash';
 import { _signL1Action } from './util/_signL1Action';
-import { updateLeverage } from './util/updateLeverage';
+import { _updateLeverage } from './util/_updateLeverage';
 
 interface Props {
     account: Address;
@@ -181,7 +181,7 @@ export async function openPerp(
 
         const signature = await _signL1Action(action, nonce, true, agentWallet);
 
-        await updateLeverage(leverage, perpInfo.assetIndex, agentWallet);
+        await _updateLeverage(leverage, perpInfo.assetIndex, agentWallet);
 
         const res = await axios.post(
             'https://api.hyperliquid.xyz/exchange',

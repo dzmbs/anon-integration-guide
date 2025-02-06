@@ -5,7 +5,7 @@ import { _signL1Action } from './_signL1Action';
 /**
  * Updates the leverage on Hyperliquid for the selected asset
  */
-export async function updateLeverage(leverageAmount: number, assetIndex: number, agentWallet: PrivateKeyAccount) {
+export async function _updateLeverage(leverageAmount: number, assetIndex: number, agentWallet: PrivateKeyAccount) {
     const action = {
         type: 'updateLeverage',
         asset: assetIndex,
