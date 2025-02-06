@@ -32,7 +32,7 @@ interface Props {
  */
 export async function openPerp(
     { account, asset, size, sizeUnit, leverage, short, closing }: Props,
-    { notify, getProvider, sendTransactions, signMessages, signTypedDatas }: FunctionOptions,
+    { signTypedDatas }: FunctionOptions,
 ): Promise<FunctionReturn> {
     try {
         //
