@@ -1,5 +1,5 @@
 import { AiTool, getChainName } from '@heyanon/sdk';
-import { supportedChains } from './constants';
+import { hyperliquidPerps, supportedChains } from './constants';
 
 export const tools: AiTool[] = [
     {
@@ -85,7 +85,7 @@ export const tools: AiTool[] = [
             {
                 name: 'asset',
                 type: 'string',
-                enum: ['ETH', 'BTC', 'HYPE', 'PURR', 'LINK', 'ARB'],
+                enum: Object.keys(hyperliquidPerps),
                 description: 'Name of the underlying asset for the perp position.',
             },
             {

@@ -11,7 +11,7 @@ import { _updateLeverage } from './util/_updateLeverage';
 
 interface Props {
     account: Address;
-    asset: 'ETH' | 'BTC' | 'HYPE' | 'PURR' | 'LINK' | 'ARB';
+    asset: keyof typeof hyperliquidPerps;
     size: string;
     sizeUnit: 'ASSET' | 'USD';
     leverage: number;
