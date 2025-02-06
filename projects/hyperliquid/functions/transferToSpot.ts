@@ -4,19 +4,17 @@ import { FunctionReturn, FunctionOptions, toResult } from '@heyanon/sdk';
 
 interface Props {
     amount: string;
-    toPerp: boolean;
 }
 
 /**
- * Transfers funds between the user's spot and perp balances on Hyperliquid by signing EIP-712 typed data.
+ * Transfers funds from user's perpetual (perp) balance to spot balance on Hyperliquid by signing EIP-712 typed data.
  * @param amount - Amount of USDC to transfer
- * @param toPerp - If true, transfers funds from spot to perp; if false, transfers funds from perp to spot
  * @param options - SDK function options
  * @returns Promise resolving to function execution result
  */
-export async function spotPerpTransfer({ amount, toPerp }: Props, { signTypedDatas, notify }: FunctionOptions): Promise<FunctionReturn> {
+export async function transferToSpot({ amount }: Props, { signTypedDatas, notify }: FunctionOptions): Promise<FunctionReturn> {
     try {
-        console.log('Starting spot/perp transfer with:', { amount, toPerp });
+        console.log('Starting perp->spot transfer with:', { amount });
 
         // Validate amount
         const parsedAmount = parseFloat(amount);
@@ -41,7 +39,7 @@ export async function spotPerpTransfer({ amount, toPerp }: Props, { signTypedDat
             hyperliquidChain: 'Mainnet',
             signatureChainId: '0xa4b1',
             amount,
-            toPerp,
+            toPerp: false,
             nonce,
         };
 
@@ -84,10 +82,10 @@ export async function spotPerpTransfer({ amount, toPerp }: Props, { signTypedDat
         const data = res.data;
 
         if (data.status !== 'ok') {
-            throw new Error(data);
+            throw new Error(data.response);
         }
 
-        return toResult(`Successfully initiated transfer of ${amount} USDC ${toPerp ? 'from spot to perp' : 'from perp to spot'} on Hyperliquid.`);
+        return toResult(`Successfully initiated transfer of ${amount} USDC from perp to spot on Hyperliquid.`);
     } catch (error) {
         console.log('Spot/Perp transfer error:', error);
         return toResult('Failed to transfer funds between spot and perp balances on Hyperliquid. Please try again.', true);

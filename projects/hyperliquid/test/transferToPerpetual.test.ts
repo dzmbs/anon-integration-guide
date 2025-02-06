@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { Address } from 'viem';
-import { spotPerpTransfer } from '../functions';
+import { transferToPerpetual } from '../functions';
 import { ARBITRUM_CHAIN_ID } from '../constants';
 import { toResult } from '@heyanon/sdk';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
-describe('spotPerpTransfer', () => {
+describe('transferToPerpetual', () => {
     const mockNotify = jest.fn((message: string) => {
         console.log(message);
         return Promise.resolve();
@@ -23,8 +23,7 @@ describe('spotPerpTransfer', () => {
     });
 
     const props = {
-        amount: '100',
-        toPerp: true,
+        amount: '100'
     };
 
     it('should prepare and send transfer transaction correctly', async () => {
@@ -41,7 +40,7 @@ describe('spotPerpTransfer', () => {
             },
         });
 
-        const result = await spotPerpTransfer(props, {
+        const result = await transferToPerpetual(props, {
             notify: mockNotify,
             signTypedDatas: mockSignTypedDatas,
             getProvider: mockProvider,
@@ -72,7 +71,7 @@ describe('spotPerpTransfer', () => {
     });
 
     it('should return error if amount is invalid (non-numeric)', async () => {
-        const result = await spotPerpTransfer(
+        const result = await transferToPerpetual(
             { ...props, amount: 'invalid-amount' },
             {
                 notify: mockNotify,
@@ -86,7 +85,7 @@ describe('spotPerpTransfer', () => {
     });
 
     it('should return error if amount is less than or equal to zero', async () => {
-        const result = await spotPerpTransfer(
+        const result = await transferToPerpetual(
             { ...props, amount: '-100' },
             {
                 notify: mockNotify,
@@ -100,7 +99,7 @@ describe('spotPerpTransfer', () => {
     });
 
     it('should return error if signTypedDatas is not available', async () => {
-        const result = await spotPerpTransfer(props, {
+        const result = await transferToPerpetual(props, {
             notify: mockNotify,
             signTypedDatas: undefined,
             getProvider: mockProvider,
@@ -125,7 +124,7 @@ describe('spotPerpTransfer', () => {
 
         mockedAxios.post.mockRejectedValue(new Error('Network error'));
 
-        const result = await spotPerpTransfer(props, {
+        const result = await transferToPerpetual(props, {
             notify: mockNotify,
             signTypedDatas: mockSignTypedDatas,
             getProvider: mockProvider,
@@ -152,7 +151,7 @@ describe('spotPerpTransfer', () => {
             },
         });
 
-        const result = await spotPerpTransfer(props, {
+        const result = await transferToPerpetual(props, {
             notify: mockNotify,
             signTypedDatas: mockSignTypedDatas,
             getProvider: mockProvider,
@@ -193,7 +192,7 @@ describe('spotPerpTransfer', () => {
                 mockedAxios.post.mockRejectedValue(new Error('Network error'));
             }
 
-            const result = await spotPerpTransfer(
+            const result = await transferToPerpetual(
                 { ...props, amount: testCase.amount },
                 {
                     notify: mockNotify,

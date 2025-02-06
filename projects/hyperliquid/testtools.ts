@@ -31,7 +31,7 @@ function transformToOpenAITools(aiTools: any[]) {
 (async () => {
     const completion = await openai.chat.completions.create({
         model: 'gpt-4o',
-        messages: [{ role: 'user', content: 'My address is 0x4CD78194C1ee971Be9dA35C7A489b75a36C8ae3E. Close my ARB position on Hyperliquid' }],
+        messages: [{ role: 'user', content: 'I need you to transfer 55.5 USD from perps to spot on Hyperliquid' }],
         tools: transformToOpenAITools(tools),
         store: true,
     });

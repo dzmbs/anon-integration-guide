@@ -7,6 +7,8 @@ import { SendTransactionProps, TransactionReturn, TransactionReturnData } from '
 import { privateKeyToAccount } from 'viem/accounts';
 import { closePerp } from './functions/closePerp';
 import { openPerp } from './functions';
+import { transferToSpot } from './functions/transferToSpot';
+import { transferToPerpetual } from './functions/transferToPerpetual';
 
 const privateKey = process.env.WALLET_PRIVATE_KEY;
 
@@ -78,8 +80,8 @@ async function notify(message: string) {
         console.error('Error during open:');
         console.error(error);
     });*/
-openPerp(
-    { account: localAccount.address, asset: 'BTC', size: '1000', sizeUnit: 'USD', leverage: 50, short: true },
+/*openPerp(
+    { account: localAccount.address, asset: 'BTC', size: '20', sizeUnit: 'USD', leverage: 50, short: true },
     { notify, getProvider, sendTransactions, signMessages, signTypedDatas },
 )
     .then((result) => {
@@ -88,7 +90,7 @@ openPerp(
     .catch((error) => {
         console.error('Error during open:');
         console.error(error);
-    });
+    });*/
 /*
 withdrawFromHyperliquid(
     {
@@ -112,11 +114,9 @@ withdrawFromHyperliquid(
         console.error(error);
     });*/
 
-/*// Execute the spotPerpTransfer with the implemented functions.
-spotPerpTransfer(
+transferToPerpetual(
     {
-        amount: '1',
-        toPerp: true,
+        amount: '0.01'
     },
     {
         notify,
@@ -132,4 +132,4 @@ spotPerpTransfer(
     .catch((error) => {
         console.error('Error during transfer:');
         console.error(error);
-    });*/
+    });

@@ -77,13 +77,20 @@ await withdrawFromHyperliquid({
 });
 ```
 
-### Moving USDC between spot and perp balances on Hyperliquid
+### Moving USDC from spot to perp balance on Hyperliquid
 
 ```typescript
-// Withdraw USDC from Hyperliquid to Arbitrum
-await spotPerpTransfer({
-    amount: '5', // Amount in USDC
-    toPerp: false, // If true, transfers funds from spot to perp; if false, transfers funds from perp to spot
+// Move funds from spot to perp account
+await transferToPerpetual({
+    amount: '5' // Amount in USDC
+});
+```
+### Moving USDC from perp to spot balance on Hyperliquid
+
+```typescript
+// Move funds from perp to spot account
+await transferToSpot({
+    amount: '900' // Amount in USDC
 });
 ```
 
