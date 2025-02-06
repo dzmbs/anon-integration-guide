@@ -50,7 +50,7 @@ export const tools: AiTool[] = [
     },
     {
         name: 'transferToPerpetual',
-        description: "Transfers funds to user's perp balance on Hyperliquid (from his spot balance)",
+        description: "Transfers funds to user's perpetual trading balance on Hyperliquid (from his spot balance)",
         required: ['amount'],
         props: [
             {
@@ -62,7 +62,7 @@ export const tools: AiTool[] = [
     },
     {
         name: 'transferToSpot',
-        description: "Transfers funds to user's spot balance on Hyperliquid (from his perp balance)",
+        description: "Transfers funds to user's spot balance on Hyperliquid (from his perpetual trading balance)",
         required: ['amount'],
         props: [
             {

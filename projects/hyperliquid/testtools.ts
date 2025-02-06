@@ -31,7 +31,7 @@ function transformToOpenAITools(aiTools: any[]) {
 (async () => {
     const completion = await openai.chat.completions.create({
         model: 'gpt-4o',
-        messages: [{ role: 'user', content: 'I need you to transfer 55.5 USD from perps to spot on Hyperliquid' }],
+        messages: [{ role: 'user', content: 'Move 100USDC from my spot to my perp balance on Hyperliquid' }],
         tools: transformToOpenAITools(tools),
         store: true,
     });
