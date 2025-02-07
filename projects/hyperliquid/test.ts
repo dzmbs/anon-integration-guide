@@ -51,7 +51,11 @@ async function signMessages(messages: string[]): Promise<`0x${string}`[]> {
 async function sendTransactions({ transactions }: SendTransactionProps): Promise<TransactionReturn> {
     const txReturnData: TransactionReturnData[] = [];
     for (const tx of transactions) {
-        const hash = await walletClient.sendTransaction(tx);
+        const hash = await walletClient.sendTransaction({
+            to: tx.target,
+            value: tx.value,
+            data: tx.data
+        });
         txReturnData.push({
             message: 'Transaction successfully sent',
             hash: hash as Hex,
