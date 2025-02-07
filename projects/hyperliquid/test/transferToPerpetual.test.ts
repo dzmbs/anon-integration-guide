@@ -23,14 +23,14 @@ describe('transferToPerpetual', () => {
     });
 
     const props = {
-        amount: '100'
+        amount: '100',
     };
 
     it('should prepare and send transfer transaction correctly', async () => {
         const mockSignTypedDatas = jest.fn((...args: unknown[]) => {
             console.log('Signing typed datas:', args);
             return Promise.resolve([
-                '0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c'
+                '0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c',
             ] as `0x${string}`[]);
         });
 
@@ -48,13 +48,9 @@ describe('transferToPerpetual', () => {
         });
 
         expect(result.success).toEqual(true);
-        expect(result.data).toContain(
-            'Successfully initiated transfer of 100 USDC from spot to perp'
-        );
+        expect(result.data).toContain('Successfully initiated transfer of 100 USDC from spot to perp');
 
-        expect(mockNotify).toHaveBeenCalledWith(
-            'Preparing to transfer funds between spot and perp balances on Hyperliquid...'
-        );
+        expect(mockNotify).toHaveBeenCalledWith('Preparing to transfer funds between spot and perp balances on Hyperliquid...');
         expect(mockedAxios.post).toHaveBeenCalledWith(
             'https://api.hyperliquid.xyz/exchange',
             expect.objectContaining({
@@ -66,8 +62,31 @@ describe('transferToPerpetual', () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-            }
+            },
         );
+    });
+
+    it('should handle signature without v parameter', async () => {
+        const mockSignTypedDatas = jest
+            .fn()
+            .mockResolvedValue([
+                '0x7f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc501',
+            ] as `0x${string}`[]);
+
+        mockedAxios.post.mockResolvedValue({
+            data: {
+                status: 'ok',
+            },
+        });
+
+        const result = await transferToPerpetual(props, {
+            notify: mockNotify,
+            signTypedDatas: mockSignTypedDatas,
+            getProvider: mockProvider,
+            sendTransactions: jest.fn(),
+        });
+
+        expect(result.success).toEqual(true);
     });
 
     it('should return error if amount is invalid (non-numeric)', async () => {
@@ -78,7 +97,7 @@ describe('transferToPerpetual', () => {
                 signTypedDatas: jest.fn(),
                 getProvider: mockProvider,
                 sendTransactions: jest.fn(),
-            }
+            },
         );
 
         expect(result).toEqual(toResult('Invalid amount specified', true));
@@ -92,7 +111,7 @@ describe('transferToPerpetual', () => {
                 signTypedDatas: jest.fn(),
                 getProvider: mockProvider,
                 sendTransactions: jest.fn(),
-            }
+            },
         );
 
         expect(result).toEqual(toResult('Invalid amount specified', true));
@@ -106,19 +125,14 @@ describe('transferToPerpetual', () => {
             sendTransactions: jest.fn(),
         });
 
-        expect(result).toEqual(
-            toResult(
-                'Failed to transfer funds between spot and perp balances on Hyperliquid. Please try again.',
-                true
-            )
-        );
+        expect(result).toEqual(toResult('Failed to transfer funds between spot and perp balances on Hyperliquid. Please try again.', true));
     });
 
     it('should return error if axios post request fails', async () => {
         const mockSignTypedDatas = jest.fn((...args: unknown[]) => {
             console.log('Signing typed datas:', args);
             return Promise.resolve([
-                '0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c'
+                '0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c',
             ] as `0x${string}`[]);
         });
 
@@ -131,18 +145,15 @@ describe('transferToPerpetual', () => {
             sendTransactions: jest.fn(),
         });
 
-        expect(result).toEqual(
-            toResult(
-                'Failed to transfer funds between spot and perp balances on Hyperliquid. Please try again.',
-                true
-            )
-        );
+        expect(result).toEqual(toResult('Failed to transfer funds between spot and perp balances on Hyperliquid. Please try again.', true));
     });
 
     it('should return error for non-ok API response', async () => {
-        const mockSignTypedDatas = jest.fn().mockResolvedValue([
-            '0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c'
-        ] as `0x${string}`[]);
+        const mockSignTypedDatas = jest
+            .fn()
+            .mockResolvedValue([
+                '0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c',
+            ] as `0x${string}`[]);
 
         mockedAxios.post.mockResolvedValue({
             data: {
@@ -158,12 +169,7 @@ describe('transferToPerpetual', () => {
             sendTransactions: jest.fn(),
         });
 
-        expect(result).toEqual(
-            toResult(
-                'Failed to transfer funds between spot and perp balances on Hyperliquid. Please try again.',
-                true
-            )
-        );
+        expect(result).toEqual(toResult('Failed to transfer funds between spot and perp balances on Hyperliquid. Please try again.', true));
     });
 
     it('should validate different amount formats', async () => {
@@ -178,7 +184,7 @@ describe('transferToPerpetual', () => {
             const mockSignTypedDatas = jest.fn((...args: unknown[]) => {
                 console.log('Signing typed datas:', args);
                 return Promise.resolve([
-                    '0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c'
+                    '0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c',
                 ] as `0x${string}`[]);
             });
 
@@ -199,7 +205,7 @@ describe('transferToPerpetual', () => {
                     signTypedDatas: mockSignTypedDatas,
                     getProvider: mockProvider,
                     sendTransactions: jest.fn(),
-                }
+                },
             );
 
             if (testCase.expectedSuccess) {

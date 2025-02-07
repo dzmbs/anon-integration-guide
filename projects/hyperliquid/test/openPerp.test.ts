@@ -15,7 +15,9 @@ jest.mock('viem/accounts', () => ({
     privateKeyToAccount: jest.fn(() => ({
         address: '0xAgentWalletAddress',
         // Simulate signTypedData returning a dummy signature.
-        signTypedData: jest.fn(() => Promise.resolve('0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c')),
+        signTypedData: jest.fn(() =>
+            Promise.resolve('0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c'),
+        ),
     })),
 }));
 
@@ -68,6 +70,86 @@ describe('openPerp', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         (global.fetch as jest.Mock).mockReset();
+    });
+
+    it('should prepare and send the transaction correctly and return a success message', async () => {
+        // Successful sequence:
+        // 1. clearinghouseState returns no open positions and sufficient withdrawable funds.
+        // 2. metaAndAssetCtxs returns a valid midPx.
+        // 3. ApproveAgent succeeds.
+        // 4. Order call returns statuses with a valid filled order.
+        setupAxiosResponses([
+            {
+                data: { assetPositions: [], withdrawable: '10000' },
+            },
+            {
+                data: [{}, { [perpInfo.assetIndex]: { midPx: '200' } }],
+            },
+            { data: { status: 'ok' } },
+            {
+                data: {
+                    status: 'ok',
+                    response: {
+                        data: {
+                            statuses: [{ filled: { totalSz: '1', avgPx: '205' } }, {}],
+                        },
+                    },
+                },
+            },
+        ]);
+
+        (global.fetch as jest.Mock).mockResolvedValue({
+            json: () => Promise.resolve({}),
+        });
+
+        const result = await openPerp(defaultProps, {
+            notify: mockNotify,
+            getProvider: mockGetProvider,
+            sendTransactions: mockSendTransactions,
+            signMessages: jest.fn(),
+            signTypedDatas: mockSignTypedDatasExample,
+        });
+
+        expect(result.success).toEqual(true);
+        expect(result.data).toContain(`Successfully bought ${defaultProps.size} ${defaultProps.asset} with ${defaultProps.leverage}x leverage`);
+    });
+
+    it('should handle signature without v parameter', async () => {
+        const mockSignTypedDatas = jest
+            .fn()
+            .mockResolvedValue([
+                '0x7f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc501',
+            ] as `0x${string}`[]);
+
+        setupAxiosResponses([
+            {
+                data: { assetPositions: [], withdrawable: '1000' },
+            },
+            {
+                data: [{}, { [perpInfo.assetIndex]: { midPx: '100' } }],
+            },
+            { data: { status: 'ok' } },
+            {
+                data: {
+                    status: 'ok',
+                    response: {
+                        data: {
+                            statuses: [{ filled: { totalSz: '1', avgPx: '100' } }],
+                        },
+                    },
+                },
+            },
+        ]);
+
+        const result = await openPerp(defaultProps, {
+            notify: mockNotify,
+            getProvider: mockGetProvider,
+            sendTransactions: mockSendTransactions,
+            signMessages: jest.fn(),
+            signTypedDatas: mockSignTypedDatas,
+        });
+
+        expect(result.success).toEqual(true);
     });
 
     it('should return error if user already has a perp open', async () => {
@@ -311,47 +393,5 @@ describe('openPerp', () => {
         });
 
         expect(result).toEqual(toResult('Failed to open position on Hyperliquid. Please try again.', true));
-    });
-
-    it('should prepare and send the transaction correctly and return a success message', async () => {
-        // Successful sequence:
-        // 1. clearinghouseState returns no open positions and sufficient withdrawable funds.
-        // 2. metaAndAssetCtxs returns a valid midPx.
-        // 3. ApproveAgent succeeds.
-        // 4. Order call returns statuses with a valid filled order.
-        setupAxiosResponses([
-            {
-                data: { assetPositions: [], withdrawable: '10000' },
-            },
-            {
-                data: [{}, { [perpInfo.assetIndex]: { midPx: '200' } }],
-            },
-            { data: { status: 'ok' } },
-            {
-                data: {
-                    status: 'ok',
-                    response: {
-                        data: {
-                            statuses: [{ filled: { totalSz: '1', avgPx: '205' } }, {}],
-                        },
-                    },
-                },
-            },
-        ]);
-
-        (global.fetch as jest.Mock).mockResolvedValue({
-            json: () => Promise.resolve({}),
-        });
-
-        const result = await openPerp(defaultProps, {
-            notify: mockNotify,
-            getProvider: mockGetProvider,
-            sendTransactions: mockSendTransactions,
-            signMessages: jest.fn(),
-            signTypedDatas: mockSignTypedDatasExample,
-        });
-
-        expect(result.success).toEqual(true);
-        expect(result.data).toContain(`Successfully bought ${defaultProps.size} ${defaultProps.asset} with ${defaultProps.leverage}x leverage`);
     });
 });
