@@ -1,6 +1,6 @@
-import { parseSignature, PrivateKeyAccount, zeroAddress } from "viem";
-import { _actionHash } from "./_actionHash";
-import { HYPERLIQUID_L1_DOMAIN_CHAIN_ID } from "../../constants";
+import { parseSignature, PrivateKeyAccount, zeroAddress } from 'viem';
+import { _actionHash } from './_actionHash';
+import { HYPERLIQUID_L1_DOMAIN_CHAIN_ID } from '../../constants';
 
 /**
  * Signs an action on Hyperliquid chain using agent wallet

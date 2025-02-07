@@ -89,7 +89,7 @@ export async function transferToPerpetual({ amount }: Props, { signTypedDatas, n
         return toResult(`Successfully initiated transfer of ${amount} USDC from spot to perp balance on Hyperliquid.`);
     } catch (error) {
         console.log('Spot/Perp transfer error:', error);
-        console.log(error)
+        console.log(error);
         return toResult('Failed to transfer funds between spot and perp balances on Hyperliquid. Please try again.', true);
     }
 }

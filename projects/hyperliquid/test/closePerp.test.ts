@@ -19,7 +19,9 @@ const mockNotify = jest.fn((message: string) => Promise.resolve());
 const mockGetProvider = jest.fn();
 const mockSendTransactions = jest.fn();
 const mockSignMessages = jest.fn();
-const mockSignTypedDatas = jest.fn(() => Promise.resolve(['0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c' as `0x${string}`]));
+const mockSignTypedDatas = jest.fn(() =>
+    Promise.resolve(['0x9f8f577823132326a0b55dea300f5b2427f3affe5b9c11eeef1ebf969238038b56bf4176fd974312f8d074eb4a5250480c088897c416098decf89a0ceaaf7cc51c' as `0x${string}`]),
+);
 
 const sdkOptions = {
     notify: mockNotify,
@@ -50,7 +52,7 @@ describe('closePerp (integration with openPerp branches)', () => {
         setupAxiosPostResponses([
             {
                 data: {
-                    assetPositions: [], 
+                    assetPositions: [],
                     withdrawable: '1000',
                 },
             },
@@ -74,7 +76,7 @@ describe('closePerp (integration with openPerp branches)', () => {
                         {
                             position: {
                                 coin: asset,
-                                szi: '-10', 
+                                szi: '-10',
                                 leverage: { value: 5 },
                             },
                         },

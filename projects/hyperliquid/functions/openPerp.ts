@@ -30,10 +30,7 @@ interface Props {
  * @param options - SDK function options
  * @returns Promise resolving to function execution result
  */
-export async function openPerp(
-    { account, asset, size, sizeUnit, leverage, short, closing }: Props,
-    { signTypedDatas }: FunctionOptions,
-): Promise<FunctionReturn> {
+export async function openPerp({ account, asset, size, sizeUnit, leverage, short, closing }: Props, { signTypedDatas }: FunctionOptions): Promise<FunctionReturn> {
     try {
         //
         // Check if user has already opened the position
@@ -204,9 +201,9 @@ export async function openPerp(
 
         const { totalSz, avgPx } = res.data.response.data.statuses[0].filled ||
             res.data.response.data.statuses[1]?.filled || {
-            totalSz: '0',
-            avgPx: '0',
-        };
+                totalSz: '0',
+                avgPx: '0',
+            };
 
         if (totalSz == '0') throw new Error('Could not open order');
 

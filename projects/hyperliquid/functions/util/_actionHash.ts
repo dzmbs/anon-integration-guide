@@ -1,5 +1,5 @@
-import { encode } from "@msgpack/msgpack";
-import { keccak256, toBytes } from "viem";
+import { encode } from '@msgpack/msgpack';
+import { keccak256, toBytes } from 'viem';
 
 /**
  * Computes keccak256 of the hyperliquid action

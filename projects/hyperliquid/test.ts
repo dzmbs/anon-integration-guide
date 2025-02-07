@@ -116,7 +116,7 @@ withdrawFromHyperliquid(
 
 transferToPerpetual(
     {
-        amount: '0.01'
+        amount: '0.01',
     },
     {
         notify,

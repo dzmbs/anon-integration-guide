@@ -1,4 +1,4 @@
-import { MAX_DECIMALS, MAX_SIGNIFICANT_DIGITS } from "../../constants";
+import { MAX_DECIMALS, MAX_SIGNIFICANT_DIGITS } from '../../constants';
 
 /**
  * Formats price to be in shape that Hyperliquid backend accepts
