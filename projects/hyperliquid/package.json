@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@heyanon/sdk": "^1.0.5",
-        "@msgpack/msgpack": "^3.0.0-beta3",
+        "@msgpack/msgpack": "^2.8.0",
         "axios": "^1.7.9"
     },
     "license": "MIT",
